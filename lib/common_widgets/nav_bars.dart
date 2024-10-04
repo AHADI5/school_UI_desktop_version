@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:school_desktop/features/classrooms/classroom_management.dart';
+import 'package:school_desktop/features/course/courses_management.dart';
+import 'package:school_desktop/features/dashboard/screens/director_dashboard.dart';
+import 'package:school_desktop/features/students/student_management.dart';
+import 'package:school_desktop/features/teacher/teachers_management.dart';
 
 class NavigationDrawerApp extends StatelessWidget {
   const NavigationDrawerApp({super.key});
@@ -93,6 +98,7 @@ class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
               : NavigationRailLabelType.none,
           destinations: destinations.map((NavBar destination) {
             return NavigationRailDestination(
+              
               icon: destination.icon,
               selectedIcon: destination.selectedIcon,
               label: Text(destination.label),
@@ -111,6 +117,7 @@ class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
 
     return Scaffold(
       key: _scaffoldKey,
+    
       body: Row(
         children: [
           if (isDesktop || isTablet)
@@ -270,32 +277,10 @@ class NavBar {
 }
 
 // Fake screens
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Dashboard Screen'));
-  }
-}
 
-class ElevesScreen extends StatelessWidget {
-  const ElevesScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Élèves Screen'));
-  }
-}
 
-class ClassesScreen extends StatelessWidget {
-  const ClassesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Classes Screen'));
-  }
-}
 
 class EnseignantsScreen extends StatelessWidget {
   const EnseignantsScreen({super.key});
@@ -361,15 +346,15 @@ class SettingsScreen extends StatelessWidget {
 }
 
 // List of destinations for the navigation bar or drawer
-const List<NavBar> destinations = <NavBar>[
-  NavBar('Dashboard', Icon(Icons.dashboard_outlined), Icon(Icons.dashboard), DashboardScreen()),
-  NavBar('Élèves', Icon(Icons.people_outline), Icon(Icons.people), ElevesScreen()),
-  NavBar('Classes', Icon(Icons.class_outlined), Icon(Icons.class_), ClassesScreen()),
-  NavBar('Enseignants', Icon(Icons.person_outline), Icon(Icons.person), EnseignantsScreen()),
-  NavBar('Cours', Icon(Icons.book_outlined), Icon(Icons.book), CoursScreen()),
-  NavBar('Communiqués', Icon(Icons.announcement_outlined), Icon(Icons.announcement), CommuniquesScreen()),
-  NavBar('Events', Icon(Icons.event_outlined), Icon(Icons.event), EventsScreen()),
-  NavBar('Parents', Icon(Icons.family_restroom_outlined), Icon(Icons.family_restroom), ParentsScreen()),
-  NavBar('Discipline', Icon(Icons.gavel_outlined), Icon(Icons.gavel), DisciplineScreen()),
-  NavBar('Settings', Icon(Icons.settings_outlined), Icon(Icons.settings), SettingsScreen()),
+List<NavBar> destinations = <NavBar>[
+  const NavBar('Dashboard', Icon(Icons.dashboard_outlined), Icon(Icons.dashboard), DirectorDashboard()),
+  const NavBar('Élèves', Icon(Icons.people_outline), Icon(Icons.people),StudentWidget()),
+  NavBar('Classes', const Icon(Icons.class_outlined), const Icon(Icons.class_), ClassroomManagement()),
+  const NavBar('Enseignants', Icon(Icons.person_outline), Icon(Icons.person), TeacherWidget()),
+  NavBar('Cours', const Icon(Icons.book_outlined), const Icon(Icons.book), CourseManagement()),
+  const NavBar('Communiqués', Icon(Icons.announcement_outlined), Icon(Icons.announcement), CommuniquesScreen()),
+  const NavBar('Events', Icon(Icons.event_outlined), Icon(Icons.event), EventsScreen()),
+  const NavBar('Parents', Icon(Icons.family_restroom_outlined), Icon(Icons.family_restroom), ParentsScreen()),
+  const NavBar('Discipline', Icon(Icons.gavel_outlined), Icon(Icons.gavel), DisciplineScreen()),
+  const NavBar('Settings', Icon(Icons.settings_outlined), Icon(Icons.settings), SettingsScreen()),
 ];
