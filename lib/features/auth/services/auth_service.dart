@@ -23,10 +23,10 @@ class AuthService {
 
   // Keys for storing data in FlutterSecureStorage
   final String _tokenKey = 'jwt_token';
+  final String _schoolIDKey = 'school_id';
   final String _deviceKey = 'device_key';
 
   // Base URL for API requests (Replace with your backend's base URL)
-
 
   // ----------------------------- Auth Methods -----------------------------
 
@@ -34,6 +34,7 @@ class AuthService {
   /// Sends a POST request to the login endpoint along with the device key and stores the JWT token.
   Future<bool> login(User user) async {
     final url = Uri.parse('$authUrl/authenticate');
+    print(url);
 
     // Generate or retrieve the device key for Firebase notifications
     // String? deviceKey = await getDeviceKey();
@@ -51,13 +52,21 @@ class AuthService {
       'Content-Type': 'application/json',
     });
 
+    print(response.statusCode);
+
     if (response.statusCode == 200) {
       // Extract JWT token from response
       final data = jsonDecode(response.body);
       final String token = data['token'];
+      final int schoolID = data['schoolID'];
+
+      print('the schoolID has been retrieved successfully $schoolID');
 
       // Store the token securely
       await _storeToken(token);
+
+      // Store the schoolID , in order to come back to it later
+      await _storeSchoolID(schoolID);
 
       return true;
     }
@@ -94,9 +103,18 @@ class AuthService {
     await _storage.write(key: _tokenKey, value: token);
   }
 
+  Future<void> _storeSchoolID(int schoolID) async {
+    await _storage.write(key: _schoolIDKey, value: schoolID.toString());
+  }
+
   /// Retrieve the JWT token from secure storage.
   Future<String?> retrieveToken() async {
     return await _storage.read(key: _tokenKey);
+  }
+
+  /// Retrieve the SchooliD from secure storage.
+  Future<String?> retrieveSchoolID() async {
+    return await _storage.read(key: _schoolIDKey);
   }
 
   /// Verify if the JWT token is valid and not expired.
@@ -140,5 +158,4 @@ class AuthService {
   }
 
   /// Get user information from the token
-
 }

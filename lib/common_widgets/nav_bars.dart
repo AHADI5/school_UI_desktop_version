@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:school_desktop/features/classrooms/classroom_management.dart';
+import 'package:school_desktop/features/communique/communique_management.dart';
 import 'package:school_desktop/features/course/courses_management.dart';
 import 'package:school_desktop/features/dashboard/screens/director_dashboard.dart';
+import 'package:school_desktop/features/events/events_management.dart';
 import 'package:school_desktop/features/students/student_management.dart';
 import 'package:school_desktop/features/teacher/teachers_management.dart';
 
@@ -351,9 +353,9 @@ List<NavBar> destinations = <NavBar>[
   const NavBar('Élèves', Icon(Icons.people_outline), Icon(Icons.people),StudentWidget()),
   NavBar('Classes', const Icon(Icons.class_outlined), const Icon(Icons.class_), ClassroomManagement()),
   const NavBar('Enseignants', Icon(Icons.person_outline), Icon(Icons.person), TeacherWidget()),
-  NavBar('Cours', const Icon(Icons.book_outlined), const Icon(Icons.book), CourseManagement()),
-  const NavBar('Communiqués', Icon(Icons.announcement_outlined), Icon(Icons.announcement), CommuniquesScreen()),
-  const NavBar('Events', Icon(Icons.event_outlined), Icon(Icons.event), EventsScreen()),
+  // const NavBar('Cours', Icon(Icons.book_outlined), const Icon(Icons.book), CourseManagementPage()),
+  const NavBar('Communiqués', Icon(Icons.announcement_outlined), Icon(Icons.announcement), SchoolHomePage()),
+  NavBar('Events', const Icon(Icons.event_outlined), const Icon(Icons.event), EventsManagementScreen()),
   const NavBar('Parents', Icon(Icons.family_restroom_outlined), Icon(Icons.family_restroom), ParentsScreen()),
   const NavBar('Discipline', Icon(Icons.gavel_outlined), Icon(Icons.gavel), DisciplineScreen()),
   const NavBar('Settings', Icon(Icons.settings_outlined), Icon(Icons.settings), SettingsScreen()),

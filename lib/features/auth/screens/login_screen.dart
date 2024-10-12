@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:school_desktop/features/auth/services/auth_service.dart';
+import '../model/user.dart'; // Ensure you have your User model imported
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -8,12 +10,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  // Controllers for email and password input fields
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  // State to toggle password visibility
   bool _obscurePassword = true;
+  bool _isLoading = false; // State for loading indicator
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,6 @@ class LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 80),
-
-                // App logo and title
                 const Column(
                   children: [
                     CircleAvatar(
@@ -48,10 +46,8 @@ class LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 20),
-
-                // Email input field
                 SizedBox(
-                  width: 400, // Adjust the width as needed
+                  width: 400,
                   child: TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -65,10 +61,8 @@ class LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Password input field with visibility toggle
                 SizedBox(
-                  width: 400, // Adjust the width as needed
+                  width: 400,
                   child: TextFormField(
                     controller: passwordController,
                     decoration: InputDecoration(
@@ -81,7 +75,6 @@ class LoginScreenState extends State<LoginScreen> {
                               : Icons.visibility_off,
                         ),
                         onPressed: () {
-                          // Toggle password visibility
                           setState(() {
                             _obscurePassword = !_obscurePassword;
                           });
@@ -95,31 +88,30 @@ class LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 30),
-
-                // Login button (no logic attached yet)
                 SizedBox(
-                  width: 400, // Same width as input fields
+                  width: 400,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Login button pressed (logic to be added later)
-                    },
+                    onPressed:
+                        _isLoading ? null : _login, // Disable button if loading
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       backgroundColor: Colors.blue,
                     ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            'Login',
+                            style: TextStyle(fontSize: 18, color: Colors.white),
+                          ),
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
                 const SizedBox(height: 20),
-
-                // App version text
                 const Text(
                   'Version 1.0.0',
                   style: TextStyle(
@@ -133,5 +125,36 @@ class LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _login() async {
+    setState(() {
+      _isLoading = true; // Show loading indicator
+    });
+
+    // Create a User object
+    User user = User(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    // Call the AuthService login method
+    bool success = await AuthService().login(user);
+    print(success);
+
+    setState(() {
+      _isLoading = false; // Hide loading indicator
+    });
+
+    if (success) {
+      // Navigate to the home page
+      Navigator.pushReplacementNamed(
+          context, '/home'); // Adjust the route name as necessary
+    } else {
+      // Show an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed. Please try again.')),
+      );
+    }
   }
 }
