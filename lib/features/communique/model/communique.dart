@@ -4,6 +4,7 @@ class CommuniqueModel {
   String content;
   DateTime publishedDate;
   String recipientType;
+  String groupName;  
   List<String> recipients;
 
   CommuniqueModel({
@@ -12,6 +13,7 @@ class CommuniqueModel {
     required this.content,
     required this.publishedDate,
     required this.recipientType,
+    required this.groupName, 
     required this.recipients,
   });
 
@@ -21,6 +23,7 @@ class CommuniqueModel {
       communiqueID: json['communiqueID'],
       title: json['title'],
       content: json['content'],
+      groupName: json['recipientGroupName'],
       publishedDate: DateTime.parse(json['publishedDate']),
       recipientType: json['recipientType'],
       recipients: List<String>.from(json['recipients']),
@@ -36,6 +39,7 @@ class CommuniqueModel {
       'publishedDate': publishedDate.toIso8601String(),
       'recipientType': recipientType,
       'recipients': recipients,
+      'recipientGroupName' : groupName  
     };
   }
 }

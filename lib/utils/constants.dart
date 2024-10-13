@@ -5,3 +5,4 @@ const communiqueUrl = '$baseUrl/school';
 const classWorks = '$baseUrl/score';
 const coursesUrl = '$baseUrl/courses';
 const eventsUrl = '$baseUrl/school/';
+const classRoomUrl = '$baseUrl/classroom';
