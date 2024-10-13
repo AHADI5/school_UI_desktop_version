@@ -64,12 +64,11 @@ class _EventsManagementScreenState extends State<EventsManagementScreen> {
   }
 
   void _showEventsForDate(DateTime date) {
-    List<Event> dateEvents = events
-        .where((event) =>
-            event.startingDate.day == date.day &&
-            event.startingDate.month == date.month &&
-            event.startingDate.year == date.year)
-        .toList();
+    // Check for events that span across the selected day (not just those starting on the selected day)
+    List<Event> dateEvents = events.where((event) {
+      return (event.startingDate.isBefore(date.add(const Duration(days: 1))) &&
+          event.endingDate.isAfter(date.subtract(const Duration(days: 1))));
+    }).toList();
 
     showDialog(
       context: context,
@@ -370,6 +369,7 @@ class _EventsManagementScreenState extends State<EventsManagementScreen> {
           CalendarView.week,
           CalendarView.month,
           CalendarView.schedule,
+          CalendarView.timelineMonth
         ],
         initialDisplayDate: selectedDate,
         onTap: (CalendarTapDetails details) {
@@ -384,7 +384,8 @@ class _EventsManagementScreenState extends State<EventsManagementScreen> {
         monthViewSettings: const MonthViewSettings(
           appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
         ),
-        
+        allowDragAndDrop: true,
+        allowAppointmentResize: true,
         dataSource: EventDataSource(events),
       ),
     );
