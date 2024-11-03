@@ -3,6 +3,7 @@ import 'package:school_desktop/features/classrooms/classroom_management.dart';
 import 'package:school_desktop/features/communique/communique_management.dart';
 import 'package:school_desktop/features/course/courses_management.dart';
 import 'package:school_desktop/features/dashboard/screens/director_dashboard.dart';
+import 'package:school_desktop/features/discipline/screens/discipline_screen.dart';
 import 'package:school_desktop/features/events/events_management.dart';
 import 'package:school_desktop/features/parents/screens/parents.dart';
 import 'package:school_desktop/features/students/student_management.dart';
@@ -366,8 +367,8 @@ List<NavBar> destinations = <NavBar>[
       EventsManagementScreen()),
   const NavBar('Parents', Icon(Icons.family_restroom_outlined),
       Icon(Icons.family_restroom), ParentScreen()),
-  const NavBar('Discipline', Icon(Icons.gavel_outlined), Icon(Icons.gavel),
-      DisciplineScreen()),
+  NavBar('Discipline', const Icon(Icons.gavel_outlined), const Icon(Icons.gavel),
+      RuleManagementPage()),
   const NavBar('Settings', Icon(Icons.settings_outlined), Icon(Icons.settings),
       SettingsScreen()),
 ];
