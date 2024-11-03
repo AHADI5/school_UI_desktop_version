@@ -1,352 +1,15 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_quill/flutter_quill.dart' as quill;
-// import 'package:flutter_quill/flutter_quill.dart';
-
-// class SchoolHomePage extends StatefulWidget {
-//   const SchoolHomePage({super.key});
-
-//   @override
-//   SchoolHomePageState createState() => SchoolHomePageState();
-// }
-
-// class SchoolHomePageState extends State<SchoolHomePage> {
-//   String selectedFilter = "Personal"; // Default filter selection
-//   String searchQuery = ""; // To store the search query
-
-//   String? selectedRecipient; // Track the currently selected recipient
-
-//   // Dummy data for communications with each recipient
-//   final Map<String, List<String>> communications = {
-//     "Kevin Nicholas": ["Sometimes I wish..."],
-//     "Kenda Jenner": ["La saeta, al final...", "Those were the good times..."],
-//     "Lydia Paulina": ["I lost my way..."],
-//     "Katherine Imani": ["Calling you late at night..."],
-//     "Gabriel Jesus": ["I wish I could forget..."],
-//     "Kevin de Bruyne": ["I've seen all the pain..."],
-//     "Lukaku Tohlong": ["I let you take all my pride..."],
-//   };
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Row(
-//         children: [
-//           // Left Column (User list)
-//           Expanded(
-//             flex: 2,
-//             child: Container(
-//               color: Colors.grey[50],
-//               child: Column(
-//                 children: [
-//                   // Row for search bar and filter icon button
-//                   Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: Row(
-//                       children: [
-//                         // Search bar
-//                         Expanded(
-//                           // Wrap TextField in Expanded to fill available space
-//                           child: TextField(
-//                             onChanged: (value) {
-//                               setState(() {
-//                                 searchQuery = value; // Update search query
-//                               });
-//                             },
-//                             decoration: const InputDecoration(
-//                               labelText: 'Search',
-//                               border: OutlineInputBorder(),
-//                             ),
-//                           ),
-//                         ),
-//                         // Filter icon button
-//                         IconButton(
-//                           icon: const Icon(Icons.filter_list),
-//                           onPressed: () {
-//                             // Show filter options in a dialog
-//                             showDialog(
-//                               context: context,
-//                               builder: (BuildContext context) {
-//                                 return AlertDialog(
-//                                   title: const Text('Select Filter'),
-//                                   content: Column(
-//                                     mainAxisSize: MainAxisSize.min,
-//                                     children: <Widget>[
-//                                       RadioListTile<String>(
-//                                         title: const Text('Personal'),
-//                                         value: 'Personal',
-//                                         groupValue: selectedFilter,
-//                                         onChanged: (value) {
-//                                           setState(() {
-//                                             selectedFilter =
-//                                                 value!; // Update filter selection
-//                                           });
-//                                           Navigator.of(context)
-//                                               .pop(); // Close dialog
-//                                         },
-//                                       ),
-//                                       RadioListTile<String>(
-//                                         title: const Text('Group'),
-//                                         value: 'Group',
-//                                         groupValue: selectedFilter,
-//                                         onChanged: (value) {
-//                                           setState(() {
-//                                             selectedFilter =
-//                                                 value!; // Update filter selection
-//                                           });
-//                                           Navigator.of(context)
-//                                               .pop(); // Close dialog
-//                                         },
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 );
-//                               },
-//                             );
-//                           },
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                   // User list based on search query and filter
-//                   Expanded(
-//                     child: ListView(
-//                       children: communications.keys
-//                           .where((recipient) => recipient
-//                               .toLowerCase()
-//                               .contains(searchQuery
-//                                   .toLowerCase())) // Filter by search query
-//                           .map((recipient) {
-//                         // Modify this condition if needed to filter by type
-//                         if (selectedFilter == "Personal") {
-//                           // Assuming all entries are personal for now
-//                           return buildUserTile(
-//                               recipient, communications[recipient]!.first);
-//                         } else {
-//                           // For groups, you can implement additional logic
-//                           return Container(); // Return an empty container for group filter
-//                         }
-//                       }).toList(),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-
-//           // Right Column (Message thread for selected recipient)
-//           Expanded(
-//             flex: 5,
-//             child: Container(
-//               padding: const EdgeInsets.all(16),
-//               color: Colors.white,
-//               child: selectedRecipient == null
-//                   ? const Center(
-//                       child: Text(
-//                         "Select a recipient to view communications",
-//                         style: TextStyle(color: Colors.grey, fontSize: 18),
-//                       ),
-//                     )
-//                   : Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         // Header with recipient's details
-//                         Row(
-//                           children: [
-//                             CircleAvatar(child: Text(selectedRecipient![0])),
-//                             const SizedBox(width: 10),
-//                             Column(
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 Text(
-//                                   selectedRecipient!,
-//                                   style: const TextStyle(
-//                                       fontWeight: FontWeight.bold,
-//                                       fontSize: 18),
-//                                 ),
-//                                 Text(
-//                                   "${selectedRecipient!.toLowerCase().replaceAll(' ', '')}@mail.com",
-//                                   style: const TextStyle(color: Colors.grey),
-//                                 ),
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                         const SizedBox(height: 20),
-
-//                         // Messages list for the selected recipient
-//                         Expanded(
-//                           child: ListView(
-//                             children: communications[selectedRecipient]!
-//                                 .map((message) => buildMessageBubble(message))
-//                                 .toList(),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//             ),
-//           ),
-//         ],
-//       ),
-
-//       // Floating Action Button (FAB) to add new communique
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {
-//           // Handle the logic for adding a new communique
-//           _showAddCommuniqueDialog(context);
-//         },
-//         tooltip: "Add New Communique",
-//         child: const Icon(Icons.add),
-//       ),
-//     );
-//   }
-
-//   Widget buildMessageBubble(String message) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 10),
-//       child: Text(
-//         message,
-//         style: const TextStyle(fontSize: 16, height: 1.5),
-//       ),
-//     );
-//   }
-
-//   // Build a list tile for each recipient
-//   Widget buildUserTile(String name, String messagePreview) {
-//     return ListTile(
-//       leading: CircleAvatar(child: Text(name[0])),
-//       title: Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-//       subtitle: Text(messagePreview),
-//       trailing: const Text("18:30 PDT", style: TextStyle(color: Colors.grey)),
-//       onTap: () {
-//         // Update the selected recipient when clicked
-//         setState(() {
-//           selectedRecipient = name;
-//         });
-//       },
-//     );
-//   }
-
-//   // Redesigned and Simplified Dialog Box for adding a communique
-//   void _showAddCommuniqueDialog(BuildContext context) {
-//     quill.QuillController quillController = quill.QuillController.basic();
-//     TextEditingController titleController = TextEditingController();
-//     TextEditingController recipientController = TextEditingController();
-
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           contentPadding: const EdgeInsets.all(16.0),
-//           content: SizedBox(
-//             width: MediaQuery.of(context).size.width * 0.6,
-//             height: MediaQuery.of(context).size.height *
-//                 0.7, // Adjusted height to accommodate fields
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 // Dialog Title
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     const Padding(
-//                       padding: EdgeInsets.all(14.0),
-//                       child: Text(
-//                         'Nouveau communiqué',
-//                         style: TextStyle(
-//                             fontSize: 18, fontWeight: FontWeight.bold),
-//                       ),
-//                     ),
-//                     IconButton(
-//                       icon: const Icon(Icons.close),
-//                       onPressed: () {
-//                         Navigator.of(context).pop();
-//                       },
-//                     ),
-//                   ],
-//                 ),
-//                 const SizedBox(height: 10),
-
-//                 // Title Field
-//                 Padding(
-//                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-//                   child: TextField(
-//                     controller: titleController,
-//                     decoration: const InputDecoration(
-//                       labelText: 'Titre du communiqué',
-//                     ),
-//                   ),
-//                 ),
-
-//                 // Recipient Field
-//                 Padding(
-//                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-//                   child: TextField(
-//                     controller: recipientController,
-//                     decoration: const InputDecoration(
-//                       labelText: 'Destinataire',
-//                     ),
-//                   ),
-//                 ),
-
-//                 //Tool Bat
-
-//                 const SizedBox(height: 10),
-//                 QuillSimpleToolbar(
-//                   controller: quillController,
-//                   configurations: const QuillSimpleToolbarConfigurations(
-//                     toolbarIconAlignment: WrapAlignment.start,
-//                     showInlineCode: false,
-//                     showClearFormat: false,
-//                     showIndent: false,
-//                     showSearchButton: false,
-//                     multiRowsDisplay: false,
-//                     color: Color.fromARGB(255, 240, 246, 249),
-//                   ),
-//                 ),
-
-//                 const SizedBox(height: 10),
-
-//                 // Text Editor (Quill)
-//                 Expanded(
-//                   child: quill.QuillEditor.basic(
-//                     controller: quillController,
-//                     configurations: const quill.QuillEditorConfigurations(
-//                         padding: EdgeInsets.all(8.0)),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           actions: [
-//             IconButton(
-//                 onPressed: () {}, icon: const Icon(Icons.attach_file_outlined)),
-//             IconButton(onPressed: () {}, icon: const Icon(Icons.photo)),
-//             ElevatedButton(
-//               onPressed: () {
-//                 // Handle the communiqué logic (you can customize this part)
-
-//                 Navigator.of(context).pop(); // Close dialog after processing
-//               },
-//               style: ButtonStyle(
-//                 backgroundColor: MaterialStateProperty.all<Color>(
-//                     Colors.lightBlue), // Light blue background
-//                 foregroundColor: MaterialStateProperty.all<Color>(
-//                     Colors.white), // White text
-//               ),
-//               child: const Text('Envoyer'),
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:school_desktop/features/communique/model/Communique.dart';
+import 'package:school_desktop/features/communique/model/communiqueSent.dart';
 import 'package:school_desktop/features/communique/model/recipients.dart';
+import 'package:school_desktop/features/communique/service/communique_service.dart';
 import 'package:school_desktop/features/communique/service/recepient_service.dart';
 import 'package:school_desktop/utils/constants.dart';
+import 'dart:convert';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 class SchoolHomePage extends StatefulWidget {
   const SchoolHomePage({super.key});
@@ -356,109 +19,243 @@ class SchoolHomePage extends StatefulWidget {
 }
 
 class SchoolHomePageState extends State<SchoolHomePage> {
+  final Logger _logger = Logger();
   final SectionService sectionService = SectionService();
+  final CommuniqueService _communiqueService = CommuniqueService();
   List<Section> sections = [];
-  List<CommuniqueModel> communiques = [];
+  List<CommuniqueResponse> communiques = [];
   String? selectedGroup;
   bool isLoading = true;
+  Map<String, List<String>> parentGroups = {};
+
+  //A list to contain   a list of parent reviews
+  List<CommuniqueReviewRegisterResponse> communiqueReviews = [];
+  CommuniqueResponse? selectedCommunique;
 
   @override
   void initState() {
     super.initState();
-    fetchSections();
+    fetchSectionsAndGroupParents();
   }
 
-  // Fetches sections dynamically from the server
-  Future<void> fetchSections() async {
-    List<Section>? fetchedSections =
-        await sectionService.fetchSections('$classRoomUrl/${2}/communicationCorespondent');
-    setState(() {
-      sections = fetchedSections ?? [];
-      isLoading = false;
-    });
+  Future<void> fetchSectionsAndGroupParents() async {
+    List<Section>? fetchedSections = await sectionService
+        .fetchSections('$classRoomUrl/${2}/communicationCorespondent');
+    if (fetchedSections != null) {
+      setState(() {
+        sections = fetchedSections.map((section) {
+          section.sectionName = utf8.decode(section.sectionName.runes.toList());
+          for (var level in section.parentPerLevelList) {
+            for (var classroom in level.parentPerClassRoomList) {
+              classroom.classRoomName =
+                  utf8.decode(classroom.classRoomName.runes.toList());
+            }
+          }
+          return section;
+        }).toList();
+        isLoading = false;
+        groupParentEmails();
+      });
+    }
   }
 
-  // Fetches communiqués dynamically based on the selected group
+  void groupParentEmails() {
+    Map<String, List<String>> groupedParents = {};
+    for (var section in sections) {
+      String sectionGroupName = section.sectionName[0];
+      groupedParents[sectionGroupName] = [];
+      for (var level in section.parentPerLevelList) {
+        String levelGroupName = "${section.sectionName[0]}-L${level.level}";
+        groupedParents[levelGroupName] = [];
+        for (var classroom in level.parentPerClassRoomList) {
+          String classroomGroupName =
+              "${section.sectionName[0]}-L${level.level}-${classroom.classRoomName}";
+          groupedParents[classroomGroupName] = classroom.parentEmails;
+          groupedParents[levelGroupName]?.addAll(classroom.parentEmails);
+          groupedParents[sectionGroupName]?.addAll(classroom.parentEmails);
+        }
+      }
+    }
+    parentGroups = groupedParents;
+    _logger.i("The parent Groups is $groupedParents");
+  }
+
   Future<void> fetchCommuniques(String groupName) async {
+    //Encode group name to v
+    var url = '$communiqueUrl/2/communicationsByGroupName/$groupName';
+
+    final fetchedCommuniques = await _communiqueService.fetchCommuniques(
+      url, // Replace with the actual URL
+    );
+    _logger.i(" Fetched communique  :  $fetchedCommuniques");
+
     setState(() {
-      communiques = [
-        CommuniqueModel(
-          communiqueID: 1,
-          title: "Communiqué for $groupName",
-          content: "Important information for $groupName",
-          publishedDate: DateTime.now(),
-          recipientType: "Group",
-          groupName: groupName,
-          recipients: ['example1@example.com', 'example2@example.com'],
-        ),
-        CommuniqueModel(
-          communiqueID: 2,
-          title: "Another Communiqué for $groupName",
-          content: "Additional details for $groupName",
-          publishedDate: DateTime.now(),
-          recipientType: "Group",
-          groupName: groupName,
-          recipients: ['example3@example.com', 'example4@example.com'],
-        ),
-      ];
+      communiques = fetchedCommuniques ?? [];
     });
   }
 
-  // Opens the dialog to create a new communiqué
   void _showAddCommuniqueDialog(BuildContext context) {
+    quill.QuillController quillController = quill.QuillController.basic();
     TextEditingController titleController = TextEditingController();
-    TextEditingController contentController = TextEditingController();
+    TextEditingController recipientController = TextEditingController();
+    bool isLoading = false;
+
+    // Pre-fill recipient emails if a group is selected
+    if (selectedGroup != null && parentGroups[selectedGroup] != null) {
+      recipientController.text = parentGroups[selectedGroup]!.join(', ');
+    }
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Add New Communiqué'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
+        return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+            contentPadding: const EdgeInsets.all(16.0),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.6,
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(14.0),
+                        child: Text(
+                          'Nouveau communiqué',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Title Field
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: TextField(
+                      controller: titleController,
+                      decoration: const InputDecoration(
+                        labelText: 'Titre du communiqué',
+                      ),
+                    ),
+                  ),
+
+                  // Recipient Field with Tags
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: TextFormField(
+                      controller: recipientController,
+                      decoration: const InputDecoration(
+                        labelText: 'Destinataires',
+                        hintText: 'Emails',
+                      ),
+                      readOnly: true,
+                      maxLines: null,
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Tool Bar
+                  QuillSimpleToolbar(
+                    controller: quillController,
+                    configurations: const QuillSimpleToolbarConfigurations(
+                      toolbarIconAlignment: WrapAlignment.start,
+                      showInlineCode: false,
+                      showClearFormat: false,
+                      showIndent: false,
+                      showSearchButton: false,
+                      multiRowsDisplay: false,
+                      color: Color.fromARGB(255, 240, 246, 249),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Text Editor (Quill)
+                  Expanded(
+                    child: quill.QuillEditor.basic(
+                      controller: quillController,
+                      configurations: const quill.QuillEditorConfigurations(
+                          padding: EdgeInsets.all(8.0)),
+                    ),
+                  ),
+                ],
               ),
-              TextField(
-                controller: contentController,
-                decoration: const InputDecoration(labelText: 'Content'),
-                maxLines: 3,
-              ),
-              DropdownButton<String>(
-                hint: const Text("Select Group"),
-                value: selectedGroup,
-                onChanged: (String? value) {
-                  setState(() {
-                    selectedGroup = value;
-                  });
-                },
-                items:
-                    sections.map<DropdownMenuItem<String>>((Section section) {
-                  return DropdownMenuItem<String>(
-                    value: section.sectionName,
-                    child: Text(section.sectionName),
-                  );
-                }).toList(),
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.attach_file_outlined)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.photo)),
+
+              // Send Button with Loader
+              ElevatedButton(
+                onPressed: isLoading
+                    ? null
+                    : () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+
+                        String title = titleController.text;
+                        String content = quillController.document.toPlainText();
+                        String recipientType = "GROUP"; // Assuming group type
+                        String recipientGroupName = selectedGroup ?? "";
+                        List<dynamic> recipientIDs =
+                            parentGroups[selectedGroup] ?? [];
+
+                        // Create Message instance
+                        Message message = Message(
+                          title: title,
+                          content: content,
+                          recipientType: recipientType,
+                          recipientGroupName: recipientGroupName,
+                          recipientIDs: recipientIDs,
+                        );
+
+                        // Send message and receive CommuniqueResponse
+                        try {
+                          CommuniqueResponse? response =
+                              await _communiqueService.createCommunique(
+                                  '$communiqueUrl/2/newCommunique', message);
+
+                          // Process or display the CommuniqueResponse as needed
+                          print(
+                              'Communique created with ID: ${response?.communiqueID}');
+
+                          Navigator.of(context)
+                              .pop(); // Close dialog after processing
+                        } catch (error) {
+                          // Handle error
+                          print("Failed to create communique: $error");
+                        }
+
+                        setState(() {
+                          isLoading = false;
+                        });
+                      },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.lightBlue),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                ),
+                child: isLoading
+                    ? CircularProgressIndicator(color: Colors.white)
+                    : const Text('Envoyer'),
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Add logic to save communiqué
-                Navigator.of(context).pop();
-              },
-              child: const Text('Save'),
-            ),
-          ],
         );
       },
     );
@@ -467,58 +264,303 @@ class SchoolHomePageState extends State<SchoolHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
- 
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Row(
               children: [
-                // Left Column: Section list
+                // Left Column: Groups List
                 Expanded(
-                  flex: 2,
+                  flex: 1,
+                  child: _buildGroupsList(),
+                ),
+                // Right Column: Communiqués and Details
+
+                Expanded(
+                  flex: 4,
+                  child: selectedGroup == null
+                      ? const Center(
+                          child: Text('Select a group to view communiqués'))
+                      : _buildCommuniquesSection(),
+                ),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildGroupsList() {
+    return Container(
+      color: const Color.fromARGB(255, 250, 250, 250),
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Row(
+            children: [
+              Icon(
+                Icons.group,
+                size: 24,
+                color: Colors.black,
+              ),
+              SizedBox(width: 8),
+              Text(
+                'Groups',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: ListView.builder(
+              itemCount: parentGroups.keys.length,
+              itemBuilder: (context, index) {
+                final groupName = parentGroups.keys.elementAt(index);
+                final isSelected = groupName == selectedGroup;
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedGroup = groupName;
+                      fetchCommuniques(groupName);
+                      selectedCommunique = null; // Reset selected communique
+                    });
+                  },
                   child: Container(
-                    color: Colors.grey[200],
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? const Color.fromARGB(
+                              255, 228, 232, 241) // Background if selected
+                          : Colors.transparent, // No background if not selected
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: getAvatarColor(groupName),
+                        child: Text(
+                          groupName[0],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      title: Text(groupName),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+// Define a function to generate a unique color for each group
+  Color getAvatarColor(String groupName) {
+    final colors = [
+      Colors.red,
+      Colors.blue,
+      Colors.green,
+      Colors.orange,
+      Colors.purple,
+      Colors.teal,
+      Colors.cyan,
+      Colors.amber,
+    ];
+    // Use the hashCode of the group name to assign a color from the list
+    return colors[groupName.hashCode % colors.length];
+  }
+
+Widget _buildCommuniquesSection() {
+  return Container(
+    color: Colors.white,
+    padding: const EdgeInsets.all(8.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: communiques.length,
+            itemBuilder: (context, index) {
+              final communique = communiques[index];
+
+              // Decode title and content if needed
+              final title = utf8.decode(communique.title?.runes.toList() ?? []);
+              final content = utf8.decode(communique.content?.runes.toList() ?? []);
+
+              // Retrieve reviewer counts
+              final totalReviewers = communique.reviewRegisterResponses?.length ?? 0;
+              final trueStatusCount = communique.reviewRegisterResponses?.where((reviewer) => reviewer.status == true).length ?? 0;
+              final falseStatusCount = totalReviewers - trueStatusCount;
+
+              return Card(
+                elevation: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                      title: Text(
+                        title.isNotEmpty ? title : "No Title",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        content.isNotEmpty ? content : "No Content",
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            DateFormat('yyyy-MM-dd – kk:mm').format(communique.publishedDate!),
+                            style: const TextStyle(fontSize: 12, color: Colors.black54),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            onPressed: () {
+                              // Handle modify action
+                              print('Modify communique: $title');
+                            },
+                          ),
+                          PopupMenuButton<String>(
+                            icon: const Icon(Icons.more_vert),
+                            onSelected: (value) {
+                              // Handle menu actions
+                              if (value == 'Print') {
+                                print('Print communique: $title');
+                              } else if (value == 'Delete') {
+                                print('Delete communique: $title');
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'Print',
+                                child: Text('Print'),
+                              ),
+                              const PopupMenuItem(
+                                value: 'Delete',
+                                child: Text('Delete'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        setState(() {
+                          selectedCommunique = communique;
+                        });
+                      },
+                    ),
+                    // Reviewer count section at the bottom
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+                      child: Text(
+                        "$trueStatusCount | $falseStatusCount | $totalReviewers",
+                        style: const TextStyle(fontSize: 12, color: Colors.black54),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        if (selectedCommunique != null)
+          _buildReviewersList()
+        else
+          const Center(child: Text('Select a communique to view reviewers')),
+        const Divider(),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: FloatingActionButton(
+            onPressed: () => _showAddCommuniqueDialog(context),
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            tooltip: 'Add Communiqué',
+            child: const Icon(Icons.add),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
+  Widget _buildReviewersList() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: SingleChildScrollView(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Review title
+            Expanded(
+              flex: 1,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Révue du communiqué',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8.0),
+                  // Review container
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 228, 232, 241),
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
                     child: ListView.builder(
-                      itemCount: sections.length,
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount:
+                          selectedCommunique!.reviewRegisterResponses?.length ??
+                              0,
                       itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(sections[index].sectionName),
-                          onTap: () {
-                            fetchCommuniques(sections[index].sectionName);
-                            setState(() {
-                              selectedGroup = sections[index].sectionName;
-                            });
-                          },
+                        final reviewer =
+                            selectedCommunique!.reviewRegisterResponses![index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Reviewer name
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  reviewer.recipient ?? "Unknown",
+                                  style: const TextStyle(color: Colors.black54),
+                                ),
+                              ),
+                              // Date of review
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  reviewer.date != null
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(reviewer.date!)
+                                      : "Non signé",
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.black54),
+                                ),
+                              ),
+                              // Review status icon
+                              Icon(
+                                reviewer.status == true
+                                    ? Icons.check_circle
+                                    : Icons.cancel,
+                                color: reviewer.status == true
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                            ],
+                          ),
                         );
                       },
                     ),
                   ),
-                ),
-                // Right Column: Communiqués list
-                Expanded(
-                  flex: 5,
-                  child: Container(
-                    color: Colors.white,
-                    child: selectedGroup == null
-                        ? const Center(
-                            child: Text('Select a group to view communiqués'))
-                        : ListView.builder(
-                            itemCount: communiques.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(communiques[index].title),
-                                subtitle: Text(communiques[index].content),
-                              );
-                            },
-                          ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddCommuniqueDialog(context);
-        },
-        child: const Icon(Icons.add),
+          ],
+        ),
       ),
     );
   }

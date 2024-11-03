@@ -354,15 +354,14 @@ class _EventsManagementScreenState extends State<EventsManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Event Management'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _showEventPopup(selectedDate),
-          ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   actions: [
+      //     IconButton(
+      //       icon: const Icon(Icons.add),
+      //       onPressed: () => _showEventPopup(selectedDate),
+      //     ),
+      //   ],
+      // ),
       body: SfCalendar(
         allowedViews: const [
           CalendarView.day,

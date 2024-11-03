@@ -20,25 +20,43 @@ class AuthenticatedHttpClient {
     return token != null && !JwtDecoder.isExpired(token);
   }
 
-  // Makes an authenticated GET request
+// Makes an authenticated GET request
   Future<dynamic> authenticatedGet(String url) async {
+    _logger.i("Starting GET request to $url");
+
     final token = await retrieveToken();
-    if (token == null || JwtDecoder.isExpired(token)) {
-      print("The token is already expired");
-      return null; // or throw an exception based on your error handling strategy
+    if (token == null) {
+      _logger.i("Error: No token found.");
+      return null;
+    }
+    
+    _logger.i("Token retrieved successfully. Verifying if expired...");
+
+    if (JwtDecoder.isExpired(token)) {
+      _logger.i("Error: The token is expired.");
+      return null;
     }
 
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
-    );
+    _logger.i("Token is valid. Sending GET request to the server...");
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      // Handle error based on status code or response
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        _logger.i("Request successful. Data received.");
+        return jsonDecode(response.body);
+      } else {
+        _logger.i("Request failed with status code: ${response.statusCode}");
+        _logger.i("Response body: ${response.body}");
+        return null;
+      }
+    } catch (e) {
+      _logger.i("Error occurred during GET request: $e");
       return null;
     }
   }
@@ -48,7 +66,6 @@ class AuthenticatedHttpClient {
       String url, Map<String, dynamic> body) async {
     final token = await retrieveToken();
     if (token == null || JwtDecoder.isExpired(token)) {
-   
       return null; // or throw an exception based on your error handling strategy
     }
 
@@ -65,7 +82,7 @@ class AuthenticatedHttpClient {
       return jsonDecode(response.body);
     } else {
       // Handle error based on status code or response
-         _logger.i("response code  is ${response.statusCode}");
+      _logger.i("response code  is ${response.statusCode}");
 
       return null;
     }

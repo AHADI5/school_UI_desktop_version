@@ -4,6 +4,7 @@ import 'package:school_desktop/features/communique/communique_management.dart';
 import 'package:school_desktop/features/course/courses_management.dart';
 import 'package:school_desktop/features/dashboard/screens/director_dashboard.dart';
 import 'package:school_desktop/features/events/events_management.dart';
+import 'package:school_desktop/features/parents/screens/parents.dart';
 import 'package:school_desktop/features/students/student_management.dart';
 import 'package:school_desktop/features/teacher/teachers_management.dart';
 
@@ -14,7 +15,13 @@ class NavigationDrawerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.blue, // Use any primary color that suits your app
+            brightness:
+                Brightness.light, // Set to Brightness.dark for dark mode
+          )),
       home: const NavigationDrawerExample(),
     );
   }
@@ -40,8 +47,7 @@ class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
     setState(() {
       screenIndex = selectedScreen;
     });
-    Navigator.pop(
-        context); // Close the drawer when an item is selected
+    Navigator.pop(context); // Close the drawer when an item is selected
   }
 
   // Build drawer for mobile screens
@@ -68,7 +74,8 @@ class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
                       onTap: () {
                         handleScreenChanged(destinations.indexOf(destination));
                       },
-                      selected: destinations.indexOf(destination) == screenIndex,
+                      selected:
+                          destinations.indexOf(destination) == screenIndex,
                     );
                   },
                 ).toList(),
@@ -100,7 +107,6 @@ class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
               : NavigationRailLabelType.none,
           destinations: destinations.map((NavBar destination) {
             return NavigationRailDestination(
-              
               icon: destination.icon,
               selectedIcon: destination.selectedIcon,
               label: Text(destination.label),
@@ -119,11 +125,12 @@ class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
 
     return Scaffold(
       key: _scaffoldKey,
-    
+
       body: Row(
         children: [
           if (isDesktop || isTablet)
-            buildNavigationRail(context), // Display NavigationRail for desktop/tablet
+            buildNavigationRail(
+                context), // Display NavigationRail for desktop/tablet
           Expanded(
             child: getSelectedScreen(screenIndex), // Display selected screen
           ),
@@ -135,10 +142,7 @@ class _NavigationDrawerExampleState extends State<NavigationDrawerExample> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: isDesktop
-            ? Padding(
-                padding: const EdgeInsets.only(left: 100.0),
-                child: Text(destinations[screenIndex].label),
-              )
+            ? Text(destinations[screenIndex].label)
             : Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(destinations[screenIndex].label),
@@ -240,30 +244,39 @@ class CustomSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final results = data.where((element) => element.toLowerCase().contains(query.toLowerCase())).toList();
+    final results = data
+        .where((element) => element.toLowerCase().contains(query.toLowerCase()))
+        .toList();
 
     return ListView(
-      children: results.map((result) => ListTile(
-        title: Text(result),
-        onTap: () {
-          close(context, result); // Close search and return result
-        },
-      )).toList(),
+      children: results
+          .map((result) => ListTile(
+                title: Text(result),
+                onTap: () {
+                  close(context, result); // Close search and return result
+                },
+              ))
+          .toList(),
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions = data.where((element) => element.toLowerCase().startsWith(query.toLowerCase())).toList();
+    final suggestions = data
+        .where(
+            (element) => element.toLowerCase().startsWith(query.toLowerCase()))
+        .toList();
 
     return ListView(
-      children: suggestions.map((suggestion) => ListTile(
-        title: Text(suggestion),
-        onTap: () {
-          query = suggestion;
-          showResults(context); // Show results when tapped
-        },
-      )).toList(),
+      children: suggestions
+          .map((suggestion) => ListTile(
+                title: Text(suggestion),
+                onTap: () {
+                  query = suggestion;
+                  showResults(context); // Show results when tapped
+                },
+              ))
+          .toList(),
     );
   }
 }
@@ -279,10 +292,6 @@ class NavBar {
 }
 
 // Fake screens
-
-
-
-
 
 class EnseignantsScreen extends StatelessWidget {
   const EnseignantsScreen({super.key});
@@ -320,14 +329,7 @@ class EventsScreen extends StatelessWidget {
   }
 }
 
-class ParentsScreen extends StatelessWidget {
-  const ParentsScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Parents Screen'));
-  }
-}
 
 class DisciplineScreen extends StatelessWidget {
   const DisciplineScreen({super.key});
@@ -349,14 +351,23 @@ class SettingsScreen extends StatelessWidget {
 
 // List of destinations for the navigation bar or drawer
 List<NavBar> destinations = <NavBar>[
-  const NavBar('Dashboard', Icon(Icons.dashboard_outlined), Icon(Icons.dashboard), DirectorDashboard()),
-  const NavBar('Élèves', Icon(Icons.people_outline), Icon(Icons.people),StudentWidget()),
-  NavBar('Classes', const Icon(Icons.class_outlined), const Icon(Icons.class_), ClassroomManagement()),
-  const NavBar('Enseignants', Icon(Icons.person_outline), Icon(Icons.person), TeacherWidget()),
+  const NavBar('Dashboard', Icon(Icons.dashboard_outlined),
+      Icon(Icons.dashboard), DirectorDashboard()),
+  const NavBar('Élèves', Icon(Icons.people_outline), Icon(Icons.people),
+      StudentWidget()),
+  NavBar('Classes', const Icon(Icons.class_outlined), const Icon(Icons.class_),
+      ClassroomManagement()),
+  const NavBar('Enseignants', Icon(Icons.person_outline), Icon(Icons.person),
+      TeacherWidget()),
   // const NavBar('Cours', Icon(Icons.book_outlined), const Icon(Icons.book), CourseManagementPage()),
-  const NavBar('Communiqués', Icon(Icons.announcement_outlined), Icon(Icons.announcement), SchoolHomePage()),
-  NavBar('Events', const Icon(Icons.event_outlined), const Icon(Icons.event), EventsManagementScreen()),
-  const NavBar('Parents', Icon(Icons.family_restroom_outlined), Icon(Icons.family_restroom), ParentsScreen()),
-  const NavBar('Discipline', Icon(Icons.gavel_outlined), Icon(Icons.gavel), DisciplineScreen()),
-  const NavBar('Settings', Icon(Icons.settings_outlined), Icon(Icons.settings), SettingsScreen()),
+  const NavBar('Communiqués', Icon(Icons.announcement_outlined),
+      Icon(Icons.announcement), SchoolHomePage()),
+  const NavBar('Events', Icon(Icons.event_outlined), Icon(Icons.event),
+      EventsManagementScreen()),
+  const NavBar('Parents', Icon(Icons.family_restroom_outlined),
+      Icon(Icons.family_restroom), ParentScreen()),
+  const NavBar('Discipline', Icon(Icons.gavel_outlined), Icon(Icons.gavel),
+      DisciplineScreen()),
+  const NavBar('Settings', Icon(Icons.settings_outlined), Icon(Icons.settings),
+      SettingsScreen()),
 ];

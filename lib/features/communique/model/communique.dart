@@ -1,45 +1,72 @@
-class CommuniqueModel {
-  int communiqueID;
-  String title;
-  String content;
-  DateTime publishedDate;
-  String recipientType;
-  String groupName;  
-  List<String> recipients;
+class CommuniqueReviewRegisterResponse {
+  final String? recipient;
+  final DateTime? date;
+  final bool? status;
 
-  CommuniqueModel({
-    required this.communiqueID,
-    required this.title,
-    required this.content,
-    required this.publishedDate,
-    required this.recipientType,
-    required this.groupName, 
-    required this.recipients,
+  CommuniqueReviewRegisterResponse({
+    this.recipient,
+    this.date,
+    this.status,
   });
 
-  // Factory method to create a CommuniqueModel from JSON
-  factory CommuniqueModel.fromJson(Map<String, dynamic> json) {
-    return CommuniqueModel(
-      communiqueID: json['communiqueID'],
-      title: json['title'],
-      content: json['content'],
-      groupName: json['recipientGroupName'],
-      publishedDate: DateTime.parse(json['publishedDate']),
-      recipientType: json['recipientType'],
-      recipients: List<String>.from(json['recipients']),
+  // Factory constructor to create an instance from JSON
+  factory CommuniqueReviewRegisterResponse.fromJson(Map<String, dynamic> json) {
+    return CommuniqueReviewRegisterResponse(
+      recipient: json['recipient'] as String?,
+      date: json['date'] != null ? DateTime.parse(json['date']) : null,
+      status: json['status'] as bool?,
     );
   }
 
-  // Method to convert a CommuniqueModel to JSON
+  // Method to convert an instance to JSON
   Map<String, dynamic> toJson() {
     return {
-      'communiqueID': communiqueID,
+      'recipient': recipient,
+      'date': date?.toIso8601String(),
+      'status': status,
+    };
+  }
+}
+
+class CommuniqueResponse {
+  final String? title;
+  final String? content;
+  final DateTime? publishedDate;
+  final int? communiqueID;
+  final List<CommuniqueReviewRegisterResponse>? reviewRegisterResponses;
+
+  CommuniqueResponse({
+    this.title,
+    this.content,
+    this.publishedDate,
+    this.communiqueID,
+    this.reviewRegisterResponses,
+  });
+
+  // Factory constructor to create an instance from JSON
+  factory CommuniqueResponse.fromJson(Map<String, dynamic> json) {
+    return CommuniqueResponse(
+      title: json['title'] as String?,
+      content: json['content'] as String?,
+      publishedDate: json['publishedDate'] != null
+          ? DateTime.parse(json['publishedDate'])
+          : null,
+      communiqueID: json['communiqueID'] as int?,
+      reviewRegisterResponses: (json['reviewRegisterResponses'] as List?)
+          ?.map((item) => CommuniqueReviewRegisterResponse.fromJson(item))
+          .toList(),
+    );
+  }
+
+  // Method to convert an instance to JSON
+  Map<String, dynamic> toJson() {
+    return {
       'title': title,
       'content': content,
-      'publishedDate': publishedDate.toIso8601String(),
-      'recipientType': recipientType,
-      'recipients': recipients,
-      'recipientGroupName' : groupName  
+      'publishedDate': publishedDate?.toIso8601String(),
+      'communiqueID': communiqueID,
+      'reviewRegisterResponses':
+          reviewRegisterResponses?.map((response) => response.toJson()).toList(),
     };
   }
 }
