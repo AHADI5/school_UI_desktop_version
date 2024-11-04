@@ -62,8 +62,8 @@ class AuthenticatedHttpClient {
   }
 
   // Makes an authenticated POST request
-  Future<dynamic> authenticatedPost(
-      String url, Map<String, dynamic> body) async {
+  // Makes an authenticated POST request
+  Future<dynamic> authenticatedPost(String url, dynamic body) async {
     final token = await retrieveToken();
     if (token == null || JwtDecoder.isExpired(token)) {
       return null; // or throw an exception based on your error handling strategy
@@ -75,15 +75,14 @@ class AuthenticatedHttpClient {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode(body),
+      body: jsonEncode(body), // Use jsonEncode directly on the dynamic body
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       return jsonDecode(response.body);
     } else {
       // Handle error based on status code or response
-      _logger.i("response code  is ${response.statusCode}");
-
+      _logger.i("Response code is ${response.statusCode}");
       return null;
     }
   }

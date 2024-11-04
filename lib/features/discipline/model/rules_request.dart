@@ -17,7 +17,7 @@ class RuleRequest {
       title: json['title'] ?? '',
       schoolID: json['schoolID'] ?? 0,
       content: json['content'] ?? '',
-      violation: (json['violation'] as List<dynamic>)
+      violation: (json['violationType'] as List<dynamic>)
           .map((violation) => Violation.fromJson(violation))
           .toList(),
     );

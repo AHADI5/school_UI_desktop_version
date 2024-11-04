@@ -19,21 +19,28 @@ class RuleRequestService {
   }
 
   // Creates a new rule request
-  Future<RuleRequest?> createRule(String url, RuleRequest ruleRequest) async {
-    final response = await _httpClient.authenticatedPost(url, ruleRequest.toJson());
-    logger.i("Create rule request sent.");
+Future<List<RuleRequest>?> createRules(String url, List<RuleRequest> ruleRequests) async {
+  // Call authenticatedPost with the list directly
+  final response = await _httpClient.authenticatedPost(url, ruleRequests.map((rule) => rule.toJson()).toList());
 
-    if (response != null) {
-      logger.i("Rule created successfully.");
-      return RuleRequest.fromJson(response);
-    }
-    logger.w("Failed to create rule.");
-    return null;
+  logger.i("Create rule request sent.");
+  logger.i(ruleRequests.map((rule) => rule.toJson()).toList());
+
+  if (response != null) {
+    logger.i("Rules created successfully.");
+    return List<RuleRequest>.from(response.map((json) => RuleRequest.fromJson(json)));
   }
+  
+  logger.w("Failed to create rules.");
+  return null;
+}
+
+
 
   // Updates an existing rule request
   Future<RuleRequest?> updateRule(String url, RuleRequest ruleRequest) async {
-    final response = await _httpClient.authenticatedPut(url, ruleRequest.toJson());
+    final response =
+        await _httpClient.authenticatedPut(url, ruleRequest.toJson());
     if (response != null) {
       logger.i("Rule updated successfully.");
       return RuleRequest.fromJson(response);
