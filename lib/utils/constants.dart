@@ -1,4 +1,4 @@
-const baseUrl = 'http://192.168.137.218:8080/api/v1';
+const baseUrl = 'http://localhost:8080/api/v1';
 const authUrl = '$baseUrl/auth';
 const studentUrl = '$baseUrl/student';
 const communiqueUrl = '$baseUrl/school';

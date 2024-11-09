@@ -31,7 +31,7 @@ class _ParentScreenState extends State<ParentScreen> {
 
     try {
       // Fetch data using the service
-      List<Parent>? fetchedParents = await parentService.fetchParents('$studentUrl/2/parents');
+      List<Parent>? fetchedParents = await parentService.fetchParents('$studentUrl/1/parents');
       setState(() {
         parents = fetchedParents!;
         filteredParents = fetchedParents;

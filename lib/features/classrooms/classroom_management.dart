@@ -53,7 +53,7 @@ class _ClassroomManagementState extends State<ClassroomManagement>
               },
             ),
           ),
-          VerticalDivider(),
+          const VerticalDivider(),
           // Right side: Management section
           Expanded(
             flex: 3,
@@ -64,13 +64,13 @@ class _ClassroomManagementState extends State<ClassroomManagement>
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
                           'Gestion de $selectedClassroom',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                       // Tabs for management section
                       TabBar(
                         controller: _tabController,
-                        tabs: [
+                        tabs: const [
                           Tab(text: 'Élèves inscrits'),
                           Tab(text: 'Cours'),
                           Tab(text: 'Horaires'),
@@ -81,7 +81,7 @@ class _ClassroomManagementState extends State<ClassroomManagement>
                       Expanded(
                         child: TabBarView(
                           controller: _tabController,
-                          children: [
+                          children: const [
                             Center(child: Text('Élèves inscrits')),
                             Center(child: Text('Cours')),
                             Center(child: Text('Horaires')),
@@ -92,7 +92,7 @@ class _ClassroomManagementState extends State<ClassroomManagement>
                       ),
                     ],
                   )
-                : Center(
+                : const Center(
                     child: Text('Sélectionnez une salle de classe.'),
                   ),
           ),

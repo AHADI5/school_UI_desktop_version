@@ -367,7 +367,7 @@ List<NavBar> destinations = <NavBar>[
       EventsManagementScreen()),
   const NavBar('Parents', Icon(Icons.family_restroom_outlined),
       Icon(Icons.family_restroom), ParentScreen()),
-  NavBar('Discipline', const Icon(Icons.gavel_outlined), const Icon(Icons.gavel),
+  const NavBar('Discipline', Icon(Icons.gavel_outlined), Icon(Icons.gavel),
       DisciplinePage ()),
   const NavBar('Settings', Icon(Icons.settings_outlined), Icon(Icons.settings),
       SettingsScreen()),

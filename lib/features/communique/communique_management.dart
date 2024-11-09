@@ -40,7 +40,7 @@ class SchoolHomePageState extends State<SchoolHomePage> {
 
   Future<void> fetchSectionsAndGroupParents() async {
     List<Section>? fetchedSections = await sectionService
-        .fetchSections('$classRoomUrl/${2}/communicationCorespondent');
+        .fetchSections('$classRoomUrl/${1}/communicationCorespondent');
     if (fetchedSections != null) {
       setState(() {
         sections = fetchedSections.map((section) {
@@ -82,7 +82,7 @@ class SchoolHomePageState extends State<SchoolHomePage> {
 
   Future<void> fetchCommuniques(String groupName) async {
     //Encode group name to v
-    var url = '$communiqueUrl/2/communicationsByGroupName/$groupName';
+    var url = '$communiqueUrl/1/communicationsByGroupName/$groupName';
 
     final fetchedCommuniques = await _communiqueService.fetchCommuniques(
       url, // Replace with the actual URL
